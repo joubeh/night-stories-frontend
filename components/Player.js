@@ -3,7 +3,8 @@
 import { useEffect, useState, useRef } from "react";
 import { usePlayerStore } from "@/store/playerStore";
 import "aplayer/dist/APlayer.min.css";
-import APlayer from "aplayer";
+import dynamic from "next/dynamic";
+const APlayer = dynamic(() => import("aplayer"), { ssr: false });
 
 export default function Player() {
   const playerRef = useRef(null);
@@ -11,14 +12,18 @@ export default function Player() {
 
   useEffect(() => {
     if (!isPlaying) return;
-    if (typeof window !== "undefined" && playerRef.current) {
+    if (playerRef.current) {
       const player = new APlayer({
         container: playerRef.current,
         audio: tracks,
         listFolded: true,
       });
-      player.list.switch(trackIndex);
-      player.play();
+      if (player) {
+        if (player.list) {
+          player.list.switch(trackIndex);
+        }
+        player.play();
+      }
     }
   }, [isPlaying]);
 

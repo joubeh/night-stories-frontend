@@ -17,6 +17,8 @@ export default function EditAccountPage() {
     }
   }, [isAuthenticated, router]);
 
+  if (!user) return null;
+
   const getJalaliYear = () => {
     const gYear = new Date().getFullYear();
     return gYear - 621;

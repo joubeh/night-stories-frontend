@@ -15,6 +15,8 @@ export default function InvitePage() {
     }
   }, [isAuthenticated, router]);
 
+  if (!user) return null;
+
   async function fetchData() {
     try {
       const res = await api("/api/account/invited", { method: "GET" });

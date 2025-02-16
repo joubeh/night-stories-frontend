@@ -5,7 +5,6 @@ import { useAuthStore } from "@/store/authStore";
 import Footer from "@/components/Footer";
 import Alert from "@/components/Alert";
 import "./globals.css";
-import Head from "next/head";
 
 export default function RootLayout({ children }) {
   const checkAuth = useAuthStore((state) => state.checkAuth);
