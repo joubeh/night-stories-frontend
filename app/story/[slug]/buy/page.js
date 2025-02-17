@@ -13,6 +13,12 @@ export default function Buy({ params }) {
   const [story, setStory] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push("/auth");
+    }
+  }, [isAuthenticated, router]);
+
   async function fetchStory() {
     try {
       const res = await api(`/api/story/${(await params).slug}`, {
