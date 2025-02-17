@@ -38,7 +38,7 @@ export default function RegisterPage() {
         }),
       });
       if (res.status === "ok") {
-        login(res.user);
+        login(res.user, res.token);
         router.push("/account");
       } else {
         showAlert(res.message, "error");

@@ -14,14 +14,15 @@ export const useAuthStore = create((set) => ({
 
   logout: async () => {
     try {
-      await api("/api/auth/logout", { method: "POST" });
+      localStorage.removeItem("auth_token");
       set({ user: null, isAuthenticated: false });
     } catch (error) {
       console.error("Logout failed", error);
     }
   },
 
-  login: (user) => {
+  login: (user, token) => {
+    localStorage.setItem("auth_token", token);
     set({ user: user, isAuthenticated: true });
   },
 

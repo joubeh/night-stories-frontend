@@ -74,7 +74,10 @@ export default function EditAccountPage() {
         {
           method: "POST",
           body: formData,
-          credentials: "include", // Required for Sanctum authentication
+          credentials: "include", // Required for Sanctum authentication,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+          },
         }
       );
 
