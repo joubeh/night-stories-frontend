@@ -27,7 +27,7 @@ export default function AccountPage() {
     <div className="p-5 md:max-w-xl md:mx-auto text-white">
       <div className="flex items-center gap-2">
         <img
-          src={user.image}
+          src={process.env.NEXT_PUBLIC_ASSETS_URL + user.image}
           alt={user.first_name}
           className="w-16 h-16 rounded-full"
         />
