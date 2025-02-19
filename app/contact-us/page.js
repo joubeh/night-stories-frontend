@@ -27,10 +27,13 @@ export default function ContactUsPage() {
     try {
       const res = await api("/api/contact-us", {
         method: "POST",
-        body: JSON.stringify({ phone, password, message }),
+        body: JSON.stringify({ name, phone, message }),
       });
       if (res.status === "ok") {
         showAlert("پیام شما ارسال شد.", "ok");
+        setName("");
+        setPhone("");
+        setMessage("");
       } else {
         showAlert(res.message, "error");
       }

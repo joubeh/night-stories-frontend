@@ -21,6 +21,7 @@ import api from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { useAlertStore } from "@/store/alertStore";
 import { usePlayerStore } from "@/store/playerStore";
+import Alert from "@/components/Alert";
 
 const storyInfoMap = [
   {
@@ -89,13 +90,13 @@ export default function StoryPage({ params }) {
   const router = useRouter();
   const { showAlert } = useAlertStore();
   const { isAuthenticated, user } = useAuthStore();
-  const { setTracks, playTrack, stopPlaying } = usePlayerStore();
+  const { setTracks, playTrack, isPlaying, setPlayerInstance, currentTrack } =
+    usePlayerStore();
   const [story, setStory] = useState(null);
   const [liked, setLiked] = useState(false);
   const [hasStory, setHasStory] = useState(false);
   const [comments, setComments] = useState([]);
   const [text, setText] = useState("");
-  const [isPlaying, setIsPlaying] = useState(false);
   const [playlistStories, setPlaylistStories] = useState([]);
   const [playIdx, setPlayIdx] = useState(0);
   const [likeLoading, setLikeLoading] = useState(false);
@@ -140,6 +141,7 @@ export default function StoryPage({ params }) {
           "نظر شما ذخیره شد و پس از تایید مدیر نمایش داده می شود.",
           "ok"
         );
+        setText("");
       }
     } catch (e) {
       console.log(e);
@@ -174,24 +176,53 @@ export default function StoryPage({ params }) {
   }
 
   function playStory() {
-    if (isPlaying) return;
+    if (isPlaying && currentTrack.id === story.id) return;
     if (playlistStories.length === 0) return;
     if (playLoading) return;
-    setPlayLoading(true);
-    stopPlaying();
+
     let tracksArr = [];
+    const auth_token = localStorage.getItem("auth_token");
     playlistStories.forEach((s) => {
       tracksArr.push({
         id: s.id,
         name: s.name,
-        url: process.env.NEXT_PUBLIC_API_URL + `/api/story/${s.id}/play`,
+        url:
+          process.env.NEXT_PUBLIC_API_URL +
+          `/api/story/${s.id}/play` +
+          (auth_token ? `?token=${auth_token}` : ""),
         artist: story.playlist_id ? story.playlist.name : "قصه شب",
         cover: process.env.NEXT_PUBLIC_ASSETS_URL + s.image,
       });
     });
+
+    // Stop the previous player and remove it
+    const { playerInstance } = usePlayerStore.getState();
+    if (playerInstance && playerInstance.current) {
+      playerInstance.current.destroy(); // Destroy the old player instance
+    }
+
+    // Update tracks and player state in store
     setTracks(tracksArr);
     playTrack(playIdx);
-    setIsPlaying(true);
+
+    if (playerInstance && playerInstance.current) {
+      // Create a new APlayer instance
+      import("aplayer").then(({ default: APlayer }) => {
+        const player = new APlayer({
+          container: playerInstance.current,
+          audio: tracksArr,
+          listFolded: true,
+        });
+
+        // Set the new player instance in the store
+        setPlayerInstance(player);
+
+        // Switch to the desired track and play it
+        player.list.switch(playIdx);
+        player.play();
+      });
+    }
+
     setPlayLoading(false);
   }
 
@@ -246,9 +277,13 @@ export default function StoryPage({ params }) {
                 ></path>
               </svg>
             ) : (
-              !isPlaying && <FaCirclePlay className="ml-1 text-xl" />
+              !(isPlaying && currentTrack.id === story.id) && (
+                <FaCirclePlay className="ml-1 text-xl" />
+              )
             )}
-            <span>{isPlaying ? "در حال پخش" : "پخش"}</span>
+            <span>
+              {isPlaying && currentTrack.id === story.id ? "در حال پخش" : "پخش"}
+            </span>
           </button>
           <div>
             <div
@@ -464,6 +499,7 @@ export default function StoryPage({ params }) {
             );
           })}
         </div>
+        <Alert />
         <div className="mt-3">
           <div>نظرات</div>
           {isAuthenticated ? (

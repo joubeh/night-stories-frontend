@@ -50,6 +50,7 @@ export default function ReportPage({ params }) {
       });
       if (res.status === "ok") {
         showAlert("گزارش شما ثبت شد. با تشکر.", "ok");
+        setDetails("");
       }
     } catch (e) {
       console.log(e);
