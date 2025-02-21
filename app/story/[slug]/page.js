@@ -90,8 +90,14 @@ export default function StoryPage({ params }) {
   const router = useRouter();
   const { showAlert } = useAlertStore();
   const { isAuthenticated, user } = useAuthStore();
-  const { setTracks, playTrack, isPlaying, setPlayerInstance, currentTrack } =
-    usePlayerStore();
+  const {
+    setTracks,
+    playTrack,
+    isPlaying,
+    setPlayerInstance,
+    currentTrack,
+    stopPlaying,
+  } = usePlayerStore();
   const [story, setStory] = useState(null);
   const [liked, setLiked] = useState(false);
   const [hasStory, setHasStory] = useState(false);
@@ -180,50 +186,55 @@ export default function StoryPage({ params }) {
     if (playlistStories.length === 0) return;
     if (playLoading) return;
 
-    let tracksArr = [];
-    const auth_token = localStorage.getItem("auth_token");
-    playlistStories.forEach((s) => {
-      tracksArr.push({
-        id: s.id,
-        name: s.name,
-        url:
-          process.env.NEXT_PUBLIC_API_URL +
-          `/api/story/${s.id}/play` +
-          (auth_token ? `?token=${auth_token}` : ""),
-        artist: story.playlist_id ? story.playlist.name : "قصه شب",
-        cover: process.env.NEXT_PUBLIC_ASSETS_URL + s.image,
-      });
-    });
+    stopPlaying();
 
-    // Stop the previous player and remove it
-    const { playerInstance } = usePlayerStore.getState();
-    if (playerInstance && playerInstance.current) {
-      playerInstance.current.destroy(); // Destroy the old player instance
-    }
-
-    // Update tracks and player state in store
-    setTracks(tracksArr);
-    playTrack(playIdx);
-
-    if (playerInstance && playerInstance.current) {
-      // Create a new APlayer instance
-      import("aplayer").then(({ default: APlayer }) => {
-        const player = new APlayer({
-          container: playerInstance.current,
-          audio: tracksArr,
-          listFolded: true,
+    setPlayLoading(true);
+    setTimeout(() => {
+      let tracksArr = [];
+      const auth_token = localStorage.getItem("auth_token");
+      playlistStories.forEach((s) => {
+        tracksArr.push({
+          id: s.id,
+          name: s.name,
+          url:
+            process.env.NEXT_PUBLIC_API_URL +
+            `/api/story/${s.id}/play` +
+            (auth_token ? `?token=${auth_token}` : ""),
+          artist: story.playlist_id ? story.playlist.name : "قصه شب",
+          cover: process.env.NEXT_PUBLIC_ASSETS_URL + s.image,
         });
-
-        // Set the new player instance in the store
-        setPlayerInstance(player);
-
-        // Switch to the desired track and play it
-        player.list.switch(playIdx);
-        player.play();
       });
-    }
 
-    setPlayLoading(false);
+      // Stop the previous player and remove it
+      const { playerInstance } = usePlayerStore.getState();
+      if (playerInstance && playerInstance.current) {
+        playerInstance.current.destroy(); // Destroy the old player instance
+      }
+
+      // Update tracks and player state in store
+      setTracks(tracksArr);
+      playTrack(playIdx);
+
+      if (playerInstance && playerInstance.current) {
+        // Create a new APlayer instance
+        import("aplayer").then(({ default: APlayer }) => {
+          const player = new APlayer({
+            container: playerInstance.current,
+            audio: tracksArr,
+            listFolded: true,
+          });
+
+          // Set the new player instance in the store
+          setPlayerInstance(player);
+
+          // Switch to the desired track and play it
+          player.list.switch(playIdx);
+          player.play();
+        });
+      }
+
+      setPlayLoading(false);
+    }, 1000);
   }
 
   function buy() {
