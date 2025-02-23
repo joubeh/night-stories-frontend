@@ -8,8 +8,14 @@ export default function Player() {
   const playerRef = useRef(null);
   const playerContainerRef = useRef(null);
   const { currentTrack, playlist } = usePlayerStore();
+  const audioContextRef = useRef(null);
 
   useEffect(() => {
+    if (typeof window !== "undefined" && !audioContextRef.current) {
+      audioContextRef.current = new (window.AudioContext ||
+        window.webkitAudioContext)();
+    }
+
     if (playerContainerRef.current && !playerRef.current) {
       import("aplayer").then(({ default: APlayer }) => {
         playerRef.current = new APlayer({
@@ -18,6 +24,27 @@ export default function Player() {
           theme: "#299c95",
           autoplay: true,
           listFolded: true,
+          volume: 0.7,
+          loop: "all",
+          preload: "auto",
+          order: "list",
+          mutex: true,
+        });
+
+        // Handle track end event
+        playerRef.current.on("ended", () => {
+          // Request audio focus when switching tracks
+          if (audioContextRef.current?.state === "suspended") {
+            audioContextRef.current.resume();
+          }
+        });
+
+        // Handle play event
+        playerRef.current.on("play", () => {
+          // Request audio focus when playing
+          if (audioContextRef.current?.state === "suspended") {
+            audioContextRef.current.resume();
+          }
         });
       });
     }
@@ -26,6 +53,10 @@ export default function Player() {
       if (playerRef.current) {
         playerRef.current.destroy();
         playerRef.current = null;
+      }
+      if (audioContextRef.current) {
+        audioContextRef.current.close();
+        audioContextRef.current = null;
       }
     };
   }, []);

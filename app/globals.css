@@ -23,3 +23,37 @@
 .aplayer-list-light {
   background: #001f33 !important;
 }
+
+.aplayer .aplayer-info {
+  padding: 14px 7px 0 10px;
+}
+
+.aplayer .aplayer-controller {
+  align-items: center;
+}
+
+.aplayer .aplayer-controller .aplayer-time {
+  position: static;
+}
+
+.aplayer .aplayer-controller .aplayer-bar-wrap {
+  padding: 0 0 0 5px;
+  margin: 0 5px;
+}
+
+.aplayer .aplayer-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}
+
+.aplayer .aplayer-info .aplayer-controller .aplayer-volume-wrap {
+  display: inline-block !important;
+  position: relative;
+  margin-left: 3px;
+}
+
+.aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon-loop {
+  display: inline-block !important;
+  margin-right: 3px;
+}
