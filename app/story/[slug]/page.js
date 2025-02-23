@@ -89,15 +89,8 @@ const storyInfoMap = [
 export default function StoryPage({ params }) {
   const router = useRouter();
   const { showAlert } = useAlertStore();
-  const { isAuthenticated, user } = useAuthStore();
-  const {
-    setTracks,
-    playTrack,
-    isPlaying,
-    setPlayerInstance,
-    currentTrack,
-    stopPlaying,
-  } = usePlayerStore();
+  const { isAuthenticated } = useAuthStore();
+  const { setPlaylist, setCurrentTrack } = usePlayerStore();
   const [story, setStory] = useState(null);
   const [liked, setLiked] = useState(false);
   const [hasStory, setHasStory] = useState(false);
@@ -182,59 +175,24 @@ export default function StoryPage({ params }) {
   }
 
   function playStory() {
-    if (isPlaying && currentTrack.id === story.id) return;
-    if (playlistStories.length === 0) return;
-    if (playLoading) return;
-
-    stopPlaying();
-
-    setPlayLoading(true);
-    setTimeout(() => {
-      let tracksArr = [];
-      const auth_token = localStorage.getItem("auth_token");
-      playlistStories.forEach((s) => {
-        tracksArr.push({
-          id: s.id,
-          name: s.name,
-          url:
-            process.env.NEXT_PUBLIC_API_URL +
-            `/api/story/${s.id}/play` +
-            (auth_token ? `?token=${auth_token}` : ""),
-          artist: story.playlist_id ? story.playlist.name : "قصه شب",
-          cover: process.env.NEXT_PUBLIC_ASSETS_URL + s.image,
-        });
+    let tracksArr = [];
+    const auth_token = localStorage.getItem("auth_token");
+    playlistStories.forEach((s) => {
+      tracksArr.push({
+        id: s.id,
+        name: s.name,
+        url:
+          process.env.NEXT_PUBLIC_API_URL +
+          `/api/story/${s.id}/play` +
+          (auth_token ? `?token=${auth_token}` : ""),
+        artist: story.playlist_id ? story.playlist.name : "قصه شب",
+        cover: process.env.NEXT_PUBLIC_ASSETS_URL + s.image,
       });
+    });
+    console.log(tracksArr);
 
-      // Stop the previous player and remove it
-      const { playerInstance } = usePlayerStore.getState();
-      if (playerInstance && playerInstance.current) {
-        playerInstance.current.destroy(); // Destroy the old player instance
-      }
-
-      // Update tracks and player state in store
-      setTracks(tracksArr);
-      playTrack(playIdx);
-
-      if (playerInstance && playerInstance.current) {
-        // Create a new APlayer instance
-        import("aplayer").then(({ default: APlayer }) => {
-          const player = new APlayer({
-            container: playerInstance.current,
-            audio: tracksArr,
-            listFolded: true,
-          });
-
-          // Set the new player instance in the store
-          setPlayerInstance(player);
-
-          // Switch to the desired track and play it
-          player.list.switch(playIdx);
-          player.play();
-        });
-      }
-
-      setPlayLoading(false);
-    }, 1000);
+    setPlaylist(tracksArr);
+    setCurrentTrack(tracksArr[playIdx]);
   }
 
   function buy() {
@@ -288,13 +246,9 @@ export default function StoryPage({ params }) {
                 ></path>
               </svg>
             ) : (
-              !(isPlaying && currentTrack.id === story.id) && (
-                <FaCirclePlay className="ml-1 text-xl" />
-              )
+              <FaCirclePlay className="ml-1 text-xl" />
             )}
-            <span>
-              {isPlaying && currentTrack.id === story.id ? "در حال پخش" : "پخش"}
-            </span>
+            <span>پخش</span>
           </button>
           <div>
             <div
@@ -578,7 +532,9 @@ export default function StoryPage({ params }) {
                 >
                   <div className="flex items-center gap-1">
                     <img
-                      src={comment.user.image}
+                      src={
+                        process.env.NEXT_PUBLIC_ASSETS_URL + comment.user.image
+                      }
                       alt={
                         comment.user.first_name + " " + comment.user.last_name
                       }
