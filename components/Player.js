@@ -7,7 +7,14 @@ import "aplayer/dist/APlayer.min.css";
 export default function Player() {
   const playerRef = useRef(null);
   const playerContainerRef = useRef(null);
-  const { currentTrack, playlist } = usePlayerStore();
+  const {
+    currentTrack,
+    playlist,
+    setWhatIsPlaying,
+    lastSentTime,
+    setLastSentTime,
+    sendPlayProgress,
+  } = usePlayerStore();
   const audioContextRef = useRef(null);
 
   useEffect(() => {
@@ -24,7 +31,7 @@ export default function Player() {
           theme: "#299c95",
           autoplay: true,
           listFolded: true,
-          volume: 0.7,
+          volume: 1,
           loop: "all",
           preload: "auto",
           order: "list",
@@ -45,6 +52,16 @@ export default function Player() {
           if (audioContextRef.current?.state === "suspended") {
             audioContextRef.current.resume();
           }
+        });
+
+        playerRef.current.on("listswitch", (e) => {
+          const currentTrack = playerRef.current.list.audios[e.index];
+          setWhatIsPlaying(currentTrack);
+          setLastSentTime(0);
+        });
+
+        playerRef.current.on("timeupdate", function () {
+          sendPlayProgress(Math.floor(playerRef.current.audio.currentTime));
         });
       });
     }

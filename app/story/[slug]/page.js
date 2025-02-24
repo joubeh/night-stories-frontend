@@ -90,7 +90,7 @@ export default function StoryPage({ params }) {
   const router = useRouter();
   const { showAlert } = useAlertStore();
   const { isAuthenticated } = useAuthStore();
-  const { setPlaylist, setCurrentTrack } = usePlayerStore();
+  const { setPlaylist, setCurrentTrack, whatIsPlaying } = usePlayerStore();
   const [story, setStory] = useState(null);
   const [liked, setLiked] = useState(false);
   const [hasStory, setHasStory] = useState(false);
@@ -175,21 +175,23 @@ export default function StoryPage({ params }) {
   }
 
   function playStory() {
+    if (whatIsPlaying && whatIsPlaying.name === story.name) return;
     let tracksArr = [];
     const auth_token = localStorage.getItem("auth_token");
     playlistStories.forEach((s) => {
+      const session = crypto.randomUUID();
       tracksArr.push({
         id: s.id,
         name: s.name,
+        session: session,
         url:
           process.env.NEXT_PUBLIC_API_URL +
-          `/api/story/${s.id}/play` +
-          (auth_token ? `?token=${auth_token}` : ""),
+          `/api/story/${s.id}/play?session=${session}` +
+          (auth_token ? `&token=${auth_token}` : ""),
         artist: story.playlist_id ? story.playlist.name : "قصه شب",
         cover: process.env.NEXT_PUBLIC_ASSETS_URL + s.image,
       });
     });
-    console.log(tracksArr);
 
     setPlaylist(tracksArr);
     setCurrentTrack(tracksArr[playIdx]);
@@ -221,6 +223,7 @@ export default function StoryPage({ params }) {
         </div>
         <div className="flex justify-between items-start p-3 gap-1 md:max-w-[25rem] md:mx-auto bg-c2">
           <button
+            disabled={whatIsPlaying && whatIsPlaying.name === story.name}
             onClick={(e) => playStory()}
             className="text-white bg-c3 text-sm flex items-center justify-center rounded-full p-3 px-8"
           >
@@ -248,7 +251,11 @@ export default function StoryPage({ params }) {
             ) : (
               <FaCirclePlay className="ml-1 text-xl" />
             )}
-            <span>پخش</span>
+            <span>
+              {whatIsPlaying && whatIsPlaying.name === story.name
+                ? "در حال پخش"
+                : "پخش"}
+            </span>
           </button>
           <div>
             <div
