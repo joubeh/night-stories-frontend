@@ -1,7 +1,7 @@
 "use client";
 import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
-import { FaCirclePlay } from "react-icons/fa6";
+import { FaCirclePlay, FaCircleChevronRight } from "react-icons/fa6";
 import "./roulette.css";
 import api from "@/lib/api";
 import { useAuthStore } from "@/store/authStore";
@@ -156,6 +156,15 @@ export default function RoulettePage() {
             قسمت جایزه سربزنید.
           </div>
         )}
+        <div className="mt-8">
+          <Link
+            href={`/account`}
+            className="text-white bg-orange-400 rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center flex items-center justify-center gap-1"
+          >
+            <FaCircleChevronRight className="text-md" />
+            <span>بازگشت به حساب</span>
+          </Link>
+        </div>
       </div>
     </>
   );

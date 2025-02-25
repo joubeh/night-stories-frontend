@@ -6,6 +6,9 @@ export const usePlayerStore = create((set, get) => ({
   playlist: [],
   whatIsPlaying: null,
   lastSentTime: 0,
+
+  stopPlaying: () =>
+    set({ playlist: [], currentTrack: null, whatIsPlaying: null }),
   setPlaylist: (tracks) => set({ playlist: tracks }),
   setCurrentTrack: (track) => set({ currentTrack: track }),
   setWhatIsPlaying: (track) => set({ whatIsPlaying: track }),

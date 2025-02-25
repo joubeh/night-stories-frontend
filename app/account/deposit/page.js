@@ -1,11 +1,12 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { FaCoins, FaCircleInfo } from "react-icons/fa6";
+import { FaCoins, FaCircleInfo, FaCircleChevronRight } from "react-icons/fa6";
 import numberFormat from "@/lib/numberFormat";
 import { useAuthStore } from "@/store/authStore";
 import { useRouter } from "next/navigation";
 import { useAlertStore } from "@/store/alertStore";
 import api from "@/lib/api";
+import Link from "next/link";
 
 const coinBundles = [10, 20, 50, 100];
 
@@ -41,7 +42,7 @@ export default function DepositPage() {
   }
 
   return (
-    <div>
+    <div className="md:max-w-xl md:mx-auto text-white">
       <div className="p-4">
         <div
           className="flex items-center p-4 text-sm text-blue-800 rounded-lg bg-blue-50 gap-2"
@@ -103,6 +104,15 @@ export default function DepositPage() {
           })}
         </div>
       )}
+      <div className="m-2">
+        <Link
+          href={`/account`}
+          className="text-white bg-orange-400 rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center flex items-center justify-center gap-1"
+        >
+          <FaCircleChevronRight className="text-md" />
+          <span>بازگشت به حساب</span>
+        </Link>
+      </div>
     </div>
   );
 }

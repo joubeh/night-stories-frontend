@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { FaCircleXmark, FaCircleCheck } from "react-icons/fa6";
+import { FaCircleChevronRight, FaCircleCheck } from "react-icons/fa6";
 import { useAuthStore } from "@/store/authStore";
 import { useRouter } from "next/navigation";
 import { useAlertStore } from "@/store/alertStore";
@@ -311,8 +311,8 @@ export default function EditAccountPage() {
         href="/account"
         className="text-white bg-orange-400 rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center mt-2 flex items-center justify-center gap-1"
       >
-        <FaCircleXmark />
-        <span>بازگشت</span>
+        <FaCircleChevronRight className="text-lg" />
+        <span>بازگشت به حساب</span>
       </Link>
     </form>
   );

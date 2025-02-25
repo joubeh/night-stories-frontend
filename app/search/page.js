@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import StoryCard from "@/components/StoryCard";
 import api from "@/lib/api";
 import { FaMagnifyingGlass } from "react-icons/fa6";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/store/authStore";
 
 export default function SearchPage() {
   const [stories, setStories] = useState([]);
@@ -18,6 +20,15 @@ export default function SearchPage() {
   const [language, setLanguage] = useState("");
   const [author, setAuthor] = useState("");
   const [type_of_work, setType_of_work] = useState("");
+
+  const router = useRouter();
+  const { isAuthenticated } = useAuthStore();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push("/auth");
+    }
+  }, [isAuthenticated, router]);
 
   async function fetchFilters() {
     try {

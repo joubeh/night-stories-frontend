@@ -15,6 +15,7 @@ import {
   FaBookOpen,
   FaBook,
   FaPenNib,
+  FaCircleChevronRight,
 } from "react-icons/fa6";
 import { useAuthStore } from "@/store/authStore";
 import api from "@/lib/api";
@@ -22,6 +23,7 @@ import { useRouter } from "next/navigation";
 import { useAlertStore } from "@/store/alertStore";
 import { usePlayerStore } from "@/store/playerStore";
 import Alert from "@/components/Alert";
+import PageLoading from "@/components/PageLoading";
 
 const storyInfoMap = [
   {
@@ -124,7 +126,7 @@ export default function StoryPage({ params }) {
     fetchStory();
   }, []);
 
-  if (!story) return null;
+  if (!story) return <PageLoading />;
 
   async function saveComment(e) {
     e.preventDefault();
@@ -174,10 +176,38 @@ export default function StoryPage({ params }) {
     setLikeLoading(false);
   }
 
+  const getUserOS = () => {
+    const userAgent = navigator.userAgent;
+    if (/Windows/i.test(userAgent)) return "Windows";
+    if (/Mac/i.test(userAgent)) return "MacOS";
+    if (/Linux/i.test(userAgent)) return "Linux";
+    if (/Android/i.test(userAgent)) return "Android";
+    if (/iPhone|iPad|iPod/i.test(userAgent)) return "iOS";
+    return "Unknown";
+  };
+
+  const getUserBrowser = () => {
+    const userAgent = navigator.userAgent;
+    if (/chrome|chromium|crios/i.test(userAgent)) return "Chrome";
+    if (/firefox|fxios/i.test(userAgent)) return "Firefox";
+    if (/safari/i.test(userAgent) && !/chrome|crios|chromium/i.test(userAgent))
+      return "Safari";
+    if (/edg/i.test(userAgent)) return "Edge";
+    if (/opr|opera/i.test(userAgent)) return "Opera";
+    return "Unknown";
+  };
+
   function playStory() {
     if (whatIsPlaying && whatIsPlaying.name === story.name) return;
     let tracksArr = [];
     const auth_token = localStorage.getItem("auth_token");
+    let guest_id = localStorage.getItem("guest_id");
+    if (!guest_id) {
+      guest_id = crypto.randomUUID();
+      localStorage.setItem("guest_id", guest_id);
+    }
+    const userOS = getUserOS();
+    const userAgent = getUserBrowser();
     playlistStories.forEach((s) => {
       const session = crypto.randomUUID();
       tracksArr.push({
@@ -186,8 +216,8 @@ export default function StoryPage({ params }) {
         session: session,
         url:
           process.env.NEXT_PUBLIC_API_URL +
-          `/api/story/${s.id}/play?session=${session}` +
-          (auth_token ? `&token=${auth_token}` : ""),
+          `/api/story/${s.id}/play?session=${session}&os=${userOS}&user_agent=${userAgent}` +
+          (auth_token ? `&token=${auth_token}` : `&guest_id=${guest_id}`),
         artist: story.playlist_id ? story.playlist.name : "قصه شب",
         cover: process.env.NEXT_PUBLIC_ASSETS_URL + s.image,
       });
@@ -471,6 +501,13 @@ export default function StoryPage({ params }) {
             );
           })}
         </div>
+        <Link
+          href={`/`}
+          className="text-white bg-orange-400 rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center flex items-center justify-center gap-1 mt-2"
+        >
+          <FaCircleChevronRight className="text-md" />
+          <span>بازگشت به خانه</span>
+        </Link>
         <Alert />
         <div className="mt-3">
           <div>نظرات</div>

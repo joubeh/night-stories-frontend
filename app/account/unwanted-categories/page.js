@@ -3,11 +3,9 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/authStore";
 import Link from "next/link";
-import { FaFilePen, FaArrowRightFromBracket } from "react-icons/fa6";
-import { FaBan } from "react-icons/fa6";
+import { FaCircleChevronRight } from "react-icons/fa6";
 import api from "@/lib/api";
 import { useAlertStore } from "@/store/alertStore";
-import { FaCircleCheck } from "react-icons/fa6";
 
 export default function UnwantedCategoriesPage() {
   const router = useRouter();
@@ -65,7 +63,7 @@ export default function UnwantedCategoriesPage() {
   }
 
   return (
-    <div className="p-3">
+    <div className="p-5 md:max-w-xl md:mx-auto text-white">
       <div>
         شما می توانید دسته بندی هایی که به آنها تمایل ندارید را در برنامه
         غیرفعال کنید.
@@ -90,6 +88,15 @@ export default function UnwantedCategoriesPage() {
             </button>
           );
         })}
+      </div>
+      <div className="mt-5">
+        <Link
+          href={`/account`}
+          className="text-white bg-orange-400 rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center flex items-center justify-center gap-1"
+        >
+          <FaCircleChevronRight className="text-md" />
+          <span>بازگشت به حساب</span>
+        </Link>
       </div>
     </div>
   );

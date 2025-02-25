@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePlayerStore } from "@/store/playerStore";
 import "aplayer/dist/APlayer.min.css";
+import { FaCircleXmark } from "react-icons/fa6";
 
 export default function Player() {
   const playerRef = useRef(null);
@@ -11,9 +12,9 @@ export default function Player() {
     currentTrack,
     playlist,
     setWhatIsPlaying,
-    lastSentTime,
     setLastSentTime,
     sendPlayProgress,
+    stopPlaying,
   } = usePlayerStore();
   const audioContextRef = useRef(null);
 
@@ -100,6 +101,17 @@ export default function Player() {
         playlist.length === 0 && "hidden"
       }`}
     >
+      <div
+        className="text-xl text-red-600 bg-white w-max rounded-full"
+        onClick={(e) => {
+          if (playerRef && playerRef.current) {
+            playerRef.current.pause();
+          }
+          stopPlaying();
+        }}
+      >
+        <FaCircleXmark />
+      </div>
       <div ref={playerContainerRef} className="m-0 bg-c1"></div>
     </div>
   );

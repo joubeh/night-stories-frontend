@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import api from "@/lib/api";
 import { useAuthStore } from "@/store/authStore";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { FaCircleChevronRight } from "react-icons/fa6";
 
 export default function InvitePage() {
   const { isAuthenticated, user } = useAuthStore();
@@ -75,6 +77,15 @@ export default function InvitePage() {
         ) : (
           <div>شما تا به حال کسی را دعوت نکرده اید</div>
         )}
+        <div className="">
+          <Link
+            href={`/account`}
+            className="text-white bg-orange-400 rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center flex items-center justify-center gap-1"
+          >
+            <FaCircleChevronRight className="text-md" />
+            <span>بازگشت به حساب</span>
+          </Link>
+        </div>
       </div>
     </>
   );
