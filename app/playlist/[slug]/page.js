@@ -47,7 +47,7 @@ export default function PlaylistPage({ params }) {
             <video
               className="md:max-w-[25rem] md:mx-auto md:rounded-lg"
               autoPlay
-              loop
+              controls
             >
               <source
                 src={process.env.NEXT_PUBLIC_ASSETS_URL + playlist.intro_file}
@@ -94,16 +94,11 @@ export default function PlaylistPage({ params }) {
         ) : (
           <></>
         )}
-        <div className="absolute bottom-0 right-0 w-full">
-          <div
-            className="p-3 gap-1 md:max-w-[25rem] md:mx-auto bg-c2"
-            style={{ backgroundColor: "rgba(0, 31, 51, 0.7)" }}
-          >
-            <div className="text-lg">{playlist.name}</div>
-          </div>
-        </div>
       </div>
-      <div className="p-2 text-justify m-2 mb-0 md:max-w-xl md:mx-auto notSelectable">
+      <div className="p-2 m-2 mb-0 md:max-w-xl md:mx-auto notSelectable text-lg">
+        {playlist.name}
+      </div>
+      <div className="p-2 text-justify m-2 my-0 md:max-w-xl md:mx-auto notSelectable">
         {playlist.intro_text}
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-2 p-2 md:max-w-xl md:mx-auto">

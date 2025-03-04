@@ -131,6 +131,7 @@ export default function SearchPage() {
               <div className="mb-2">گوینده</div>
               <div className="max-h-[9.5rem] overflow-y-scroll">
                 {announcers.map((a) => {
+                  if (a.name === "-") return null;
                   return (
                     <button
                       onClick={(e) => toggleAnnouncer(a.name)}
@@ -154,6 +155,7 @@ export default function SearchPage() {
               <div className="mb-2">مجموعه</div>
               <div className="max-h-[9.5rem] overflow-y-scroll">
                 {playlists.map((a) => {
+                  if (a.name === "-") return null;
                   return (
                     <button
                       onClick={(e) => togglePlaylist(a.id)}
@@ -179,6 +181,7 @@ export default function SearchPage() {
               <div className="text-xs mb-2">زبان</div>
               <div className="h-[5.5rem] overflow-y-scroll">
                 {languages.map((i, idx) => {
+                  if (i === "-") return null;
                   return (
                     <div key={i} className="flex items-start mb-2">
                       <div className="flex items-center h-5">
@@ -203,6 +206,7 @@ export default function SearchPage() {
               <div className="text-xs mb-2">نویسنده</div>
               <div className="h-[5.5rem] overflow-y-scroll">
                 {authors.map((i) => {
+                  if (i.name === "-") return null;
                   return (
                     <div key={i.id} className="flex items-start mb-2">
                       <div className="flex items-center h-5">
@@ -227,6 +231,7 @@ export default function SearchPage() {
               <div className="text-xs mb-2">نوع اثر</div>
               <div className="h-[5.5rem] overflow-y-scroll">
                 {type_of_works.map((i, idx) => {
+                  if (i === "-") return null;
                   return (
                     <div key={i} className="flex items-start mb-2">
                       <div className="flex items-center h-5">

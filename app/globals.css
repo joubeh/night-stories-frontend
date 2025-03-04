@@ -57,3 +57,23 @@
   display: inline-block !important;
   margin-right: 3px;
 }
+
+.aplayer
+  .aplayer-info
+  .aplayer-controller
+  .aplayer-time
+  .aplayer-icon:hover
+  path {
+  fill: #fff;
+}
+.aplayer .aplayer-miniswitcher .aplayer-icon:hover path {
+  fill: #fff;
+}
+
+.aplayer-pause {
+  background-color: #001f33 !important;
+}
+
+.aplayer-play {
+  background-color: #001f33 !important;
+}

@@ -8,7 +8,7 @@ import { useAlertStore } from "@/store/alertStore";
 export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const { phone, isAuthenticated, code } = useAuthStore();
+  const { phone, isAuthenticated, code, login } = useAuthStore();
   const router = useRouter();
   const showAlert = useAlertStore((state) => state.showAlert);
 
@@ -31,7 +31,8 @@ export default function RegisterPage() {
         }),
       });
       if (res.status === "ok") {
-        router.push("/auth");
+        login(res.user, res.token);
+        router.push("/account");
       } else {
         showAlert(res.message, "error");
       }

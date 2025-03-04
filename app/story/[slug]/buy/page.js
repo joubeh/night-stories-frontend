@@ -10,13 +10,15 @@ import { FaCircleChevronRight } from "react-icons/fa6";
 export default function Buy({ params }) {
   const router = useRouter();
   const { showAlert } = useAlertStore();
-  const { isAuthenticated, user } = useAuthStore();
+  const { isAuthenticated, user, checkAuth } = useAuthStore();
   const [story, setStory] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!isAuthenticated) {
       router.push("/auth");
+    } else {
+      checkAuth();
     }
   }, [isAuthenticated, router]);
 

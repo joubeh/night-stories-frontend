@@ -8,11 +8,13 @@ import { FaBan } from "react-icons/fa6";
 
 export default function AccountPage() {
   const router = useRouter();
-  const { isAuthenticated, user, logout } = useAuthStore();
+  const { isAuthenticated, user, logout, checkAuth } = useAuthStore();
 
   useEffect(() => {
     if (!isAuthenticated) {
       router.push("/auth");
+    } else {
+      checkAuth();
     }
   }, [isAuthenticated, router]);
 

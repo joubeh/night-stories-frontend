@@ -8,7 +8,7 @@ import { useAlertStore } from "@/store/alertStore";
 export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const { isAuthenticated, phone, login } = useAuthStore();
+  const { isAuthenticated, phone, login, setAction } = useAuthStore();
   const router = useRouter();
   const showAlert = useAlertStore((state) => state.showAlert);
 
@@ -38,6 +38,23 @@ export default function LoginPage() {
     setLoading(false);
   };
 
+  async function resetPasswordRequest() {
+    try {
+      const res = await api("/api/auth/forgot-password", {
+        method: "POST",
+        body: JSON.stringify({ phone }),
+      });
+      if (res.status === "ok") {
+        setAction(res.action);
+        router.push("/auth/verify");
+      } else {
+        showAlert(res.message, "error");
+      }
+    } catch (error) {
+      showAlert("خطایی رخ داده لطفا دوباره امتحان کنید.", "error");
+    }
+  }
+
   return (
     <form
       onSubmit={handleSubmit}
@@ -55,6 +72,13 @@ export default function LoginPage() {
           required
         />
       </div>
+      <button
+        type="button"
+        onClick={(e) => resetPasswordRequest()}
+        className="block text-c3 mt-1 mb-3 text-sm"
+      >
+        رمز خود را فراموش کردید؟
+      </button>
       <button
         disabled={loading}
         type="submit"
