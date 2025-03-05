@@ -104,6 +104,13 @@ export default function DepositPage() {
           })}
         </div>
       )}
+      <Link
+        className="block w-full text-center p-2 text-sm"
+        href="/terms-and-conditions"
+      >
+        «با ادامه فرآیند خرید، <span className="text-c3">قوانین و مقررات</span>{" "}
+        را می‌پذیرم.»
+      </Link>
       <div className="m-2">
         <Link
           href={`/account`}

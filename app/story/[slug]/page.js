@@ -384,17 +384,17 @@ export default function StoryPage({ params }) {
         } md:max-w-xl md:mx-auto p-3`}
       >
         <div
-          className="notSelectable"
+          className="notSelectable prose-invert"
           dangerouslySetInnerHTML={{
-            __html: story.info.replace(/\n/g, "<br/>"),
+            __html: story.info,
           }}
         ></div>
         {story.info_translate && (
           <div
             dangerouslySetInnerHTML={{
-              __html: story.info_translate.replace(/\n/g, "<br/>"),
+              __html: story.info_translate,
             }}
-            className="notSelectable"
+            className="notSelectable prose-invert"
           ></div>
         )}
       </div>
