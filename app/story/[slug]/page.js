@@ -384,6 +384,7 @@ export default function StoryPage({ params }) {
         } md:max-w-xl md:mx-auto p-3`}
       >
         <div
+          dir={story.info_dir}
           className="notSelectable prose-invert"
           dangerouslySetInnerHTML={{
             __html: story.info,
@@ -391,6 +392,7 @@ export default function StoryPage({ params }) {
         ></div>
         {story.info_translate && (
           <div
+            dir={story.info_translate_dir}
             dangerouslySetInnerHTML={{
               __html: story.info_translate,
             }}

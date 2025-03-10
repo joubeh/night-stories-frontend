@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import Alert from "@/components/Alert";
 import "./globals.css";
 import PageLoading from "@/components/PageLoading";
+import { GoogleTagManager } from "@next/third-parties/google";
 
 export default function RootLayout({ children }) {
   const checkAuth = useAuthStore((state) => state.checkAuth);
@@ -23,6 +24,7 @@ export default function RootLayout({ children }) {
   if (isLoading)
     return (
       <html dir="rtl">
+        <GoogleTagManager gtmId="GTM-5H44ZQCCDE" />
         <head>
           <title>قصه شب | داستان های صوتی برای کودکان</title>
           <meta
