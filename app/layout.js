@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 import Alert from "@/components/Alert";
 import "./globals.css";
 import PageLoading from "@/components/PageLoading";
-import { GoogleTagManager } from "@next/third-parties/google";
+import Script from "next/script";
 
 export default function RootLayout({ children }) {
   const checkAuth = useAuthStore((state) => state.checkAuth);
@@ -24,7 +24,6 @@ export default function RootLayout({ children }) {
   if (isLoading)
     return (
       <html dir="rtl">
-        <GoogleTagManager gtmId="GTM-5H44ZQCCDE" />
         <head>
           <title>قصه شب | داستان های صوتی برای کودکان</title>
           <meta
@@ -35,6 +34,19 @@ export default function RootLayout({ children }) {
             name="google-site-verification"
             content="gEUbi5xCIN-bY1bemhKrDstXkmJ78cPmYh_kiU3JgKk"
           />
+          <Script
+            async
+            src="https://www.googletagmanager.com/gtag/js?id=G-5H44ZQCCDE"
+            strategy="afterInteractive"
+          />
+          <Script id="google-analytics" strategy="afterInteractive">
+            {`
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-5H44ZQCCDE');
+  `}
+          </Script>
         </head>
         <body>
           <div className="bg-c2 min-h-screen text-white">
@@ -62,6 +74,19 @@ export default function RootLayout({ children }) {
           name="google-site-verification"
           content="gEUbi5xCIN-bY1bemhKrDstXkmJ78cPmYh_kiU3JgKk"
         />
+        <Script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-5H44ZQCCDE"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-5H44ZQCCDE');
+  `}
+        </Script>
       </head>
       <body>
         <div className="bg-c2 min-h-screen text-white">
