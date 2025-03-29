@@ -12,6 +12,7 @@
     "@next/third-parties": "^15.2.1",
     "aplayer": "^1.10.1",
     "axios": "^1.7.9",
+    "libphonenumber-js": "^1.12.6",
     "next": "15.1.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

@@ -1,6 +1,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { FaCoins, FaCircleInfo, FaCircleChevronRight } from "react-icons/fa6";
+import {
+  FaCoins,
+  FaCircleInfo,
+  FaCircleChevronRight,
+  FaArrowsRotate,
+} from "react-icons/fa6";
 import numberFormat from "@/lib/numberFormat";
 import { useAuthStore } from "@/store/authStore";
 import { useRouter } from "next/navigation";
@@ -8,13 +13,17 @@ import { useAlertStore } from "@/store/alertStore";
 import api from "@/lib/api";
 import Link from "next/link";
 
-const coinBundles = [10, 20, 50, 100];
+const iranCoinBundles = [10, 20, 50, 100];
+const foreignCoinBundles = [100, 200, 500, 1000];
 
 export default function DepositPage() {
   const router = useRouter();
   const { isAuthenticated, user } = useAuthStore();
   const showAlert = useAlertStore((state) => state.showAlert);
   const [loading, setLoading] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState(
+    user.phone[1] === "9" && user.phone[2] === "8" ? "iran" : "foreign"
+  );
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -43,16 +52,18 @@ export default function DepositPage() {
 
   return (
     <div className="md:max-w-xl md:mx-auto text-white">
-      <div className="p-4">
-        <div
-          className="flex items-center p-4 text-sm text-blue-800 rounded-lg bg-blue-50 gap-2"
-          role="alert"
-        >
-          <FaCircleInfo />
-          <div>قبل از پرداخت حتما فیلترشکن خود را خاموش کنید</div>
+      {paymentMethod === "iran" && (
+        <div className="p-4 pb-0">
+          <div
+            className="flex items-center p-4 text-sm text-blue-800 rounded-lg bg-blue-50 gap-2"
+            role="alert"
+          >
+            <FaCircleInfo />
+            <div>قبل از پرداخت حتما فیلترشکن خود را خاموش کنید</div>
+          </div>
         </div>
-      </div>
-      <div className="text-lg text-center">خرید سکه</div>
+      )}
+      <div className="text-lg text-center pt-4">خرید سکه</div>
       <div className="flex items-center justify-center gap-2 mt-2">
         <FaCoins />
         <div>سکه های شما: {user.balance}</div>
@@ -83,9 +94,9 @@ export default function DepositPage() {
             ></path>
           </svg>
         </div>
-      ) : (
+      ) : paymentMethod === "iran" ? (
         <div className="grid grid-cols-2 gap-2 p-3">
-          {coinBundles.map((item) => {
+          {iranCoinBundles.map((item) => {
             return (
               <button
                 onClick={(e) => selectBundle(item)}
@@ -103,6 +114,26 @@ export default function DepositPage() {
             );
           })}
         </div>
+      ) : (
+        <div className="grid grid-cols-2 gap-2 p-3">
+          {foreignCoinBundles.map((item) => {
+            return (
+              <button
+                onClick={(e) => {}}
+                key={item}
+                className="bg-c3 p-2 rounded-lg"
+              >
+                <div className="flex items-center justify-center gap-1">
+                  <FaCoins />
+                  <div>{item} سکه</div>
+                </div>
+                <div className="text-sm mt-1" dir="ltr">
+                  {numberFormat(parseInt(item * 0.05))}€
+                </div>
+              </button>
+            );
+          })}
+        </div>
       )}
       <Link
         className="block w-full text-center p-2 text-sm"
@@ -111,6 +142,21 @@ export default function DepositPage() {
         «با ادامه فرآیند خرید، <span className="text-c3">قوانین و مقررات</span>{" "}
         را می‌پذیرم.»
       </Link>
+      <div className="m-2">
+        <button
+          onClick={(e) => {
+            paymentMethod === "iran"
+              ? setPaymentMethod("foreign")
+              : setPaymentMethod("iran");
+          }}
+          className="text-white bg-c4 rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center flex items-center justify-center gap-1"
+        >
+          <FaArrowsRotate className="text-md" />
+          <span>
+            {paymentMethod === "iran" ? "پرداخت ارزی" : "پرداخت ریالی"}
+          </span>
+        </button>
+      </div>
       <div className="m-2">
         <Link
           href={`/account`}
