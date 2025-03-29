@@ -252,7 +252,7 @@ export default function AuthPage() {
         method: "POST",
         body: JSON.stringify({ phone: `${selectedCode}${refinedPhone}` }),
       });
-      storePhone(refinedPhone);
+      storePhone(`${selectedCode}${refinedPhone}`);
       if (res.status === "ok") {
         if (res.action === "login") {
           router.push("/auth/login");
