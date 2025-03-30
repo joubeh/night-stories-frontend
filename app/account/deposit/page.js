@@ -119,7 +119,9 @@ export default function DepositPage() {
           {foreignCoinBundles.map((item) => {
             return (
               <button
-                onClick={(e) => {}}
+                onClick={(e) => {
+                  router.push(`/account/deposit/foreign?amount=${item}`);
+                }}
                 key={item}
                 className="bg-c3 p-2 rounded-lg"
               >
