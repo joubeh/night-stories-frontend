@@ -25,7 +25,10 @@ export default function ForeignDepositPage() {
   const [loading, setLoading] = useState(false);
   const [firstName, setFirstName] = useState(user.first_name);
   const [lastName, setLastName] = useState(user.last_name);
-  const [email, setEmail] = useState(user.email);
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState(user.phone);
+  const [postalCode, setPostalCode] = useState("");
+  const [address, setAddress] = useState("");
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -80,11 +83,41 @@ export default function ForeignDepositPage() {
           <div>
             <label className="block mb-2 text-sm">ایمیل</label>
             <input
+              dir="ltr"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               type="email"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             />
+          </div>
+          <div>
+            <label className="block mb-2 text-sm">شماره تماس</label>
+            <input
+              dir="ltr"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              type="text"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            />
+          </div>
+          <div>
+            <label className="block mb-2 text-sm">کدپستی</label>
+            <input
+              dir="ltr"
+              value={postalCode}
+              onChange={(e) => setPostalCode(e.target.value)}
+              type="text"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            />
+          </div>
+          <div>
+            <label className="block mb-2 text-sm">آدرس</label>
+            <textarea
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              type="text"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            ></textarea>
           </div>
         </div>
       </form>
