@@ -5,6 +5,7 @@ import api from "@/lib/api";
 import { useAuthStore } from "@/store/authStore";
 import { useAlertStore } from "@/store/alertStore";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
+import { FaCircleInfo } from "react-icons/fa6";
 
 const countryCodes = [
   "+98",
@@ -305,6 +306,22 @@ export default function AuthPage() {
           </select>
         </div>
       </div>
+
+      {selectedCode !== "+98" && (
+        <div className="mb-3">
+          <div
+            className={`flex gap-2 items-start p-4 text-sm text-blue-800 bg-blue-50 rounded-lg`}
+            role="alert"
+          >
+            <FaCircleInfo className="text-xl" />
+            <div>
+              اگر تا بحال ثبتنام نکرده اید کد تایید برای شماره های خارجی (به جز
+              شماره های ایران) از طریق WhatsApp برای شما ارسال خواهد شد. لطفا از
+              نصب داشتن WhatsApp قبل از ثبت نام مطمعن باشید.
+            </div>
+          </div>
+        </div>
+      )}
 
       <button
         disabled={loading}
