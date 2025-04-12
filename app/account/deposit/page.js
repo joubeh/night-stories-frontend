@@ -144,6 +144,12 @@ export default function DepositPage() {
         «با ادامه فرآیند خرید، <span className="text-c3">قوانین و مقررات</span>{" "}
         را می‌پذیرم.»
       </Link>
+      <Link
+        className="block w-full text-center p-2 text-sm"
+        href="/privacy-policy"
+      >
+        <span className="text-c3">سیاست حریم شخصی (Privacy Policy)</span>
+      </Link>
       <div className="m-2">
         <button
           onClick={(e) => {
