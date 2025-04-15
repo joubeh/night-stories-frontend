@@ -23,12 +23,14 @@ export default function ForeignDepositPage() {
   const { isAuthenticated, user } = useAuthStore();
   const showAlert = useAlertStore((state) => state.showAlert);
   const [loading, setLoading] = useState(false);
-  const [firstName, setFirstName] = useState(user.first_name);
-  const [lastName, setLastName] = useState(user.last_name);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState(user.phone);
   const [postalCode, setPostalCode] = useState("");
   const [address, setAddress] = useState("");
+  const [country, setCountry] = useState("");
+  const [city, setCity] = useState("");
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -40,6 +42,37 @@ export default function ForeignDepositPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (
+      !amount ||
+      !firstName ||
+      !lastName ||
+      !email ||
+      !phone ||
+      !address ||
+      !country ||
+      !city
+    ) {
+      alert("لطفا تمامی موارد را کامل کنید");
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await api(
+        `/api/account/yekpay-deposit?amount=${amount}&firstName=${firstName}&lastName=${lastName}&email=${email}&mobile=${phone}&address=${address}&postalCode=${address}&country=${country}&city=${city}`,
+        {
+          method: "POST",
+        }
+      );
+      if (res.status === "ok") {
+        window.location.href = res.pay_link;
+      } else {
+        showAlert(res.message, "error");
+        setLoading(false);
+      }
+    } catch (error) {
+      showAlert("خطایی رخ داده لطفا دوباره امتحان کنید.", "error");
+      setLoading(false);
+    }
   };
 
   return (
@@ -56,6 +89,9 @@ export default function ForeignDepositPage() {
       <div className="text-sm mt-5 text-center">
         لطفا اطلاعات خود را کامل کنید
       </div>
+      <div className="text-sm mt-5 text-center">
+        لطفا تمامی موارد را به انگلیسی وارد کنید
+      </div>
 
       <form
         onSubmit={handleSubmit}
@@ -65,6 +101,8 @@ export default function ForeignDepositPage() {
           <div>
             <label className="block mb-2 text-sm">نام</label>
             <input
+              required
+              dir="ltr"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
               type="text"
@@ -74,6 +112,8 @@ export default function ForeignDepositPage() {
           <div>
             <label className="block mb-2 text-sm">نام خانوادگی</label>
             <input
+              required
+              dir="ltr"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
               type="text"
@@ -83,6 +123,7 @@ export default function ForeignDepositPage() {
           <div>
             <label className="block mb-2 text-sm">ایمیل</label>
             <input
+              required
               dir="ltr"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -93,6 +134,7 @@ export default function ForeignDepositPage() {
           <div>
             <label className="block mb-2 text-sm">شماره تماس</label>
             <input
+              required
               dir="ltr"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
@@ -101,8 +143,31 @@ export default function ForeignDepositPage() {
             />
           </div>
           <div>
+            <label className="block mb-2 text-sm">کشور</label>
+            <input
+              required
+              dir="ltr"
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
+              type="text"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            />
+          </div>
+          <div>
+            <label className="block mb-2 text-sm">شهر</label>
+            <input
+              required
+              dir="ltr"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+              type="text"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            />
+          </div>
+          <div>
             <label className="block mb-2 text-sm">کدپستی</label>
             <input
+              required
               dir="ltr"
               value={postalCode}
               onChange={(e) => setPostalCode(e.target.value)}
@@ -113,6 +178,7 @@ export default function ForeignDepositPage() {
           <div>
             <label className="block mb-2 text-sm">آدرس</label>
             <textarea
+              required
               value={address}
               onChange={(e) => setAddress(e.target.value)}
               type="text"
