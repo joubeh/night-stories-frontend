@@ -12,6 +12,10 @@ export default function LoginPage() {
   const router = useRouter();
   const showAlert = useAlertStore((state) => state.showAlert);
 
+  const convertToEnglishNumbers = (num) => {
+    return num.replace(/[۰-۹]/g, (d) => "۰۱۲۳۴۵۶۷۸۹".indexOf(d).toString());
+  };
+
   useEffect(() => {
     if (isAuthenticated) {
       router.push("/account");
@@ -24,7 +28,10 @@ export default function LoginPage() {
     try {
       const res = await api("/api/auth/login", {
         method: "POST",
-        body: JSON.stringify({ phone, password }),
+        body: JSON.stringify({
+          phone,
+          password: convertToEnglishNumbers(password),
+        }),
       });
       if (res.status === "ok") {
         login(res.user, res.token);

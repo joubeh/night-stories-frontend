@@ -12,6 +12,10 @@ export default function RegisterPage() {
   const router = useRouter();
   const showAlert = useAlertStore((state) => state.showAlert);
 
+  const convertToEnglishNumbers = (num) => {
+    return num.replace(/[۰-۹]/g, (d) => "۰۱۲۳۴۵۶۷۸۹".indexOf(d).toString());
+  };
+
   useEffect(() => {
     if (isAuthenticated) {
       router.push("/account");
@@ -27,7 +31,7 @@ export default function RegisterPage() {
         body: JSON.stringify({
           phone,
           code,
-          password,
+          password: convertToEnglishNumbers(password),
         }),
       });
       if (res.status === "ok") {

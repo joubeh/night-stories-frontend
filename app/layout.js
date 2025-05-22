@@ -26,6 +26,7 @@ export default function RootLayout({ children }) {
       <html dir="rtl">
         <head>
           <title>قصه شب | داستان های صوتی برای کودکان</title>
+          <link rel="manifest" href="/manifest.json" />
           <meta
             name="description"
             content="طرح کتابخوانی بنیاد نظریانی: قصه شب برای همه کودکان این سرزمین"

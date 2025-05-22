@@ -222,6 +222,7 @@ export default function StoryPage({ params }) {
         artist: story.playlist_id ? story.playlist.name : "قصه شب",
         cover: process.env.NEXT_PUBLIC_ASSETS_URL + s.image,
       });
+      console.log(tracksArr[tracksArr.length - 1]);
     });
 
     setPlaylist(tracksArr);
