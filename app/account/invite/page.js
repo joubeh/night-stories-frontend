@@ -5,6 +5,8 @@ import { useAuthStore } from "@/store/authStore";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FaCircleChevronRight } from "react-icons/fa6";
+import { LuCopy } from "react-icons/lu";
+import copy from "@/lib/copy";
 
 export default function InvitePage() {
   const { isAuthenticated, user } = useAuthStore();
@@ -46,11 +48,21 @@ export default function InvitePage() {
           کافیست دوست شما در هنگام ثبت نام کد دعوت شما را وارد کند و بعد از آن
           ۳۰ سکه به شما و ۳۰ سکه هم به دوستتان هدیه داده می شود.
         </div>
-        <div className="mt-3">
-          کد دعوت شما:{" "}
-          <code className="text-c2 font-semibold bg-gray-300 px-1">
+        <div className="mt-3 flex items-center gap-1">
+          <span>کد دعوت شما:</span>
+          <code
+            className="text-c2 font-semibold bg-gray-300 px-1 rounded"
+            dir="ltr"
+          >
             {user.phone}
           </code>
+          <button
+            onClick={(e) => copy(user.phone)}
+            className="flex items-center gap-1 bg-c3 rounded py-1 px-2"
+          >
+            <LuCopy className="text-base" />
+            <span className="text-sm">کپی</span>
+          </button>
         </div>
         <hr className="my-3" />
         {invitedUsers.length > 0 ? (
