@@ -16,7 +16,6 @@ import {
   FaBook,
   FaPenNib,
   FaCircleChevronRight,
-  FaCirclePause,
 } from "react-icons/fa6";
 import { useAuthStore } from "@/store/authStore";
 import api from "@/lib/api";
@@ -92,7 +91,7 @@ const storyInfoMap = [
 export default function StoryPage({ params }) {
   const router = useRouter();
   const { showAlert } = useAlertStore();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
   const { setPlaylist, setCurrentTrack, whatIsPlaying } = usePlayerStore();
   const [story, setStory] = useState(null);
   const [liked, setLiked] = useState(false);
@@ -355,26 +354,52 @@ export default function StoryPage({ params }) {
           </div>
         </div>
       </div>
-      {!hasStory && (
-        <div className="md:max-w-xl md:mx-auto">
-          <div className="p-3 text-sm text-center">
-            بعد از شنیدن نمونه صوتی، می‌توانید با استفاده از{" "}
-            <Link href="/account/deposit" className="text-c3">
-              حساب اعتباری خود
-            </Link>
-            ، فایل کامل را خریداری کنید.
-          </div>
-          <Link
-            href={`/story/${story.slug}/buy`}
-            className="bg-c3 text-white text-center p-2 block"
+      {user && user.has_free_trial ? (
+        <div
+          className="flex items-center p-4 m-2 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+          role="alert"
+        >
+          <svg
+            className="shrink-0 inline w-4 h-4 me-3"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 20 20"
           >
-            <div>خرید</div>
-            <div className="flex items-center justify-center gap-1 text-xs mt-1">
-              <FaCoins />
-              <span>{story.price === 0 ? "رایگان" : story.price} سکه</span>
+            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+          </svg>
+
+          <span className="sr-only">Info</span>
+          <div className="flex flex-col">
+            <div className="font-bold mb-1">هفت روز رایگان!</div>
+            <div>
+              تا هفت روز پس از ثبت نام می‌توانید به تمامی داستان ها به صورت
+              رایگان گوش دهید.
             </div>
-          </Link>
+          </div>
         </div>
+      ) : (
+        !hasStory && (
+          <div className="md:max-w-xl md:mx-auto">
+            <div className="p-3 text-sm text-center">
+              بعد از شنیدن نمونه صوتی، می‌توانید با استفاده از{" "}
+              <Link href="/account/deposit" className="text-c3">
+                حساب اعتباری خود
+              </Link>
+              ، فایل کامل را خریداری کنید.
+            </div>
+            <Link
+              href={`/story/${story.slug}/buy`}
+              className="bg-c3 text-white text-center p-2 block"
+            >
+              <div>خرید</div>
+              <div className="flex items-center justify-center gap-1 text-xs mt-1">
+                <FaCoins />
+                <span>{story.price === 0 ? "رایگان" : story.price} سکه</span>
+              </div>
+            </Link>
+          </div>
+        )
       )}
       <div className="p-3 pb-0 text-lg md:max-w-xl md:mx-auto notSelectable">
         {story.name}
