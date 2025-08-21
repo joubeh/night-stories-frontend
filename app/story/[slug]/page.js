@@ -258,9 +258,11 @@ export default function StoryPage({ params }) {
           <div className="flex flex-col">
             <div className="font-bold mb-1">هفت روز رایگان!</div>
             <div>
-              شما می‌توانید به نسخه نمونه این داستان گوش دهید. برای پخش نسخه
-              کامل لطفا ثبتنام کنید. ثبتنام کنید و هفت روز رایگان به تمامی
-              داستان ها گوش دهید.
+              <Link href="/account">
+                شما می‌توانید به نسخه نمونه این داستان گوش دهید. برای دسترسی
+                رایگان به «نسخه کامل» داستان‌های صوتی (به مدت یک هفته) از طریق
+                این لینک «ثبت نام» کنید.
+              </Link>
             </div>
           </div>
         </div>
@@ -320,6 +322,16 @@ export default function StoryPage({ params }) {
     );
   }
 
+  function playBtnTxt() {
+    if (user) {
+      if (user.has_free_trial || hasStory) {
+        return "پخش";
+      }
+    }
+
+    return "پخش نمونه";
+  }
+
   return (
     <>
       <div className="md:pt-3">
@@ -363,7 +375,7 @@ export default function StoryPage({ params }) {
             <span>
               {whatIsPlaying && whatIsPlaying.name === story.name
                 ? "در حال پخش"
-                : "پخش"}
+                : playBtnTxt()}
             </span>
           </button>
           <div>
