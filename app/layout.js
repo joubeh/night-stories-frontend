@@ -7,13 +7,19 @@ import Alert from "@/components/Alert";
 import "./globals.css";
 import PageLoading from "@/components/PageLoading";
 import Script from "next/script";
+import { useSearchParams } from "next/navigation";
 
 export default function RootLayout({ children }) {
+  const searchParams = useSearchParams();
+  const authToken = searchParams.get("auth_token");
   const checkAuth = useAuthStore((state) => state.checkAuth);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function loadUser() {
+      if (authToken) {
+        localStorage.setItem("auth_token", authToken);
+      }
       await checkAuth();
       setIsLoading(false);
     }
