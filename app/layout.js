@@ -1,17 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, use } from "react";
 import { useAuthStore } from "@/store/authStore";
 import Footer from "@/components/Footer";
 import Alert from "@/components/Alert";
 import "./globals.css";
 import PageLoading from "@/components/PageLoading";
 import Script from "next/script";
-import { useSearchParams } from "next/navigation";
 
-export default function RootLayout({ children }) {
-  const searchParams = useSearchParams();
-  const authToken = searchParams.get("auth_token");
+export default function RootLayout({ searchParams, children }) {
+  const searchParams = use(searchParams);
+  const authToken = searchParams.auth_token;
   const checkAuth = useAuthStore((state) => state.checkAuth);
   const [isLoading, setIsLoading] = useState(true);
 
