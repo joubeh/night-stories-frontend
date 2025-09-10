@@ -25,9 +25,7 @@ export default function DepositPage() {
   const { isAuthenticated, user, checkAuth } = useAuthStore();
   const showAlert = useAlertStore((state) => state.showAlert);
   const [loading, setLoading] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState(
-    user.phone[1] === "9" && user.phone[2] === "8" ? "iran" : "foreign"
-  );
+  const [paymentMethod, setPaymentMethod] = useState("iran");
 
   useEffect(() => {
     if (authToken) {
@@ -38,6 +36,14 @@ export default function DepositPage() {
       router.push("/auth");
     }
   }, [isAuthenticated, router]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      setPaymentMethod(
+        user.phone[1] === "9" && user.phone[2] === "8" ? "iran" : "foreign"
+      );
+    }
+  }, [isAuthenticated]);
 
   if (!user) return null;
 
