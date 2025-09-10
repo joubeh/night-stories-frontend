@@ -9,8 +9,8 @@ import PageLoading from "@/components/PageLoading";
 import Script from "next/script";
 
 export default function RootLayout({ searchParams, children }) {
-  const searchParams = use(searchParams);
-  const authToken = searchParams.auth_token;
+  const params = use(searchParams);
+  const authToken = params.auth_token;
   const checkAuth = useAuthStore((state) => state.checkAuth);
   const [isLoading, setIsLoading] = useState(true);
 
