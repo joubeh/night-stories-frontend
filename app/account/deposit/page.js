@@ -12,13 +12,17 @@ import { useRouter } from "next/navigation";
 import { useAlertStore } from "@/store/alertStore";
 import api from "@/lib/api";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 const iranCoinBundles = [10, 20, 50, 100];
 const foreignCoinBundles = [100, 200, 500, 1000];
 
 export default function DepositPage() {
+  const searchParams = useSearchParams();
+  const authToken = searchParams.get("auth_token");
+
   const router = useRouter();
-  const { isAuthenticated, user } = useAuthStore();
+  const { isAuthenticated, user, checkAuth } = useAuthStore();
   const showAlert = useAlertStore((state) => state.showAlert);
   const [loading, setLoading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState(
@@ -26,7 +30,11 @@ export default function DepositPage() {
   );
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (authToken) {
+      localStorage.setItem("auth_token", authToken);
+      checkAuth();
+      return;
+    } else if (!isAuthenticated) {
       router.push("/auth");
     }
   }, [isAuthenticated, router]);
