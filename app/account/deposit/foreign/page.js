@@ -58,7 +58,7 @@ export default function ForeignDepositPage() {
     setLoading(true);
     try {
       const res = await api(
-        `/api/account/yekpay-deposit?amount=${amount}&firstName=${firstName}&lastName=${lastName}&email=${email}&mobile=${phone}&address=${address}&postalCode=${address}&country=${country}&city=${city}`,
+        `/api/account/yekpay-deposit?agent=web&amount=${amount}&firstName=${firstName}&lastName=${lastName}&email=${email}&mobile=${phone}&address=${address}&postalCode=${address}&country=${country}&city=${city}`,
         {
           method: "POST",
         }

@@ -20,6 +20,7 @@ const foreignCoinBundles = [100, 200, 500, 1000];
 export default function DepositPage() {
   const searchParams = useSearchParams();
   const authToken = searchParams.get("auth_token");
+  const agent = searchParams.get("agent");
 
   const router = useRouter();
   const { isAuthenticated, user, checkAuth } = useAuthStore();
@@ -50,9 +51,12 @@ export default function DepositPage() {
   async function selectBundle(amount) {
     setLoading(true);
     try {
-      const res = await api(`/api/account/deposit?amount=${amount}`, {
-        method: "POST",
-      });
+      const res = await api(
+        `/api/account/deposit?agent=${agent || "web"}&amount=${amount}`,
+        {
+          method: "POST",
+        }
+      );
       if (res.status === "ok") {
         window.location.href = res.pay_link;
       } else {
