@@ -238,7 +238,7 @@ export default function StoryPage({ params }) {
               <Link href="/account">
                 شما می‌توانید به نسخه نمونه این داستان گوش دهید. برای دسترسی
                 رایگان به «نسخه کامل» داستان‌های صوتی (به مدت یک هفته) از طریق
-                این لینک «ثبت نام» کنید.
+                این لینک <span className="underline">«ثبت نام»</span> کنید.
               </Link>
             </div>
           </div>
