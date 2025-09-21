@@ -6,9 +6,10 @@ import "./roulette.css";
 import api from "@/lib/api";
 import { useAuthStore } from "@/store/authStore";
 import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 export default function RoulettePage() {
-  const { isAuthenticated, user } = useAuthStore();
+  const { isAuthenticated, checkAuth } = useAuthStore();
   const router = useRouter();
   const wheelRef = useRef(null);
   const [didSpin, setDidSpin] = useState(false);
@@ -17,8 +18,16 @@ export default function RoulettePage() {
   const [hasPrize, setHasPrize] = useState(false);
   const [stories, setStories] = useState([]);
 
+  const searchParams = useSearchParams();
+  const authToken = searchParams.get("auth_token");
+  const agent = searchParams.get("agent");
+
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (authToken) {
+      localStorage.setItem("auth_token", authToken);
+      checkAuth();
+      return;
+    } else if (!isAuthenticated) {
       router.push("/auth");
     }
   }, [isAuthenticated, router]);
@@ -157,13 +166,23 @@ export default function RoulettePage() {
           </div>
         )}
         <div className="mt-8">
-          <Link
-            href={`/account`}
-            className="text-white bg-orange-400 rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center flex items-center justify-center gap-1"
-          >
-            <FaCircleChevronRight className="text-md" />
-            <span>بازگشت به حساب</span>
-          </Link>
+          {agent && agent === "mobileapp" ? (
+            <a
+              href="qeseyeshab://payment"
+              className="text-white bg-orange-400 rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center flex items-center justify-center gap-1"
+            >
+              <FaCircleChevronRight className="text-md" />
+              <span>بازگشت به برنامه</span>
+            </a>
+          ) : (
+            <Link
+              href={`/account`}
+              className="text-white bg-orange-400 rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center flex items-center justify-center gap-1"
+            >
+              <FaCircleChevronRight className="text-md" />
+              <span>بازگشت به حساب</span>
+            </Link>
+          )}
         </div>
       </div>
     </>

@@ -184,13 +184,23 @@ export default function DepositPage() {
         </button>
       </div>
       <div className="m-2">
-        <Link
-          href={`/account`}
-          className="text-white bg-orange-400 rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center flex items-center justify-center gap-1"
-        >
-          <FaCircleChevronRight className="text-md" />
-          <span>بازگشت به حساب</span>
-        </Link>
+        {agent && agent === "mobileapp" ? (
+          <a
+            href="qeseyeshab://payment"
+            className="text-white bg-orange-400 rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center flex items-center justify-center gap-1"
+          >
+            <FaCircleChevronRight className="text-md" />
+            <span>بازگشت به برنامه</span>
+          </a>
+        ) : (
+          <Link
+            href={`/account`}
+            className="text-white bg-orange-400 rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center flex items-center justify-center gap-1"
+          >
+            <FaCircleChevronRight className="text-md" />
+            <span>بازگشت به حساب</span>
+          </Link>
+        )}
       </div>
     </div>
   );
