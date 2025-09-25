@@ -57,7 +57,7 @@ export default function InvitePage() {
             {user.invite_code || user.phone}
           </code>
           <button
-            onClick={(e) => copy(user.phone)}
+            onClick={(e) => copy(user.invite_code || user.phone)}
             className="flex items-center gap-1 bg-c3 rounded py-1 px-2"
           >
             <LuCopy className="text-base" />
