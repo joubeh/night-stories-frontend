@@ -54,7 +54,7 @@ export default function InvitePage() {
             className="text-c2 font-semibold bg-gray-300 px-1 rounded"
             dir="ltr"
           >
-            {user.phone}
+            {user.invite_code || user.phone}
           </code>
           <button
             onClick={(e) => copy(user.phone)}
